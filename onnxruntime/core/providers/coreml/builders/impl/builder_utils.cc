@@ -1,5 +1,5 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
-// Licens
+// Licensed under the MIT License.
 
 #include <core/common/safeint.h>
 #include <core/providers/common.h>
