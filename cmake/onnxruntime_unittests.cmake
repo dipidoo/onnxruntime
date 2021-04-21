@@ -936,6 +936,9 @@ if (onnxruntime_BUILD_SHARED_LIB)
   if (CMAKE_SYSTEM_NAME STREQUAL "Android")
     list(APPEND onnxruntime_shared_lib_test_LIBS ${android_shared_libs})
   endif()
+  if (CMAKE_SYSTEM_NAME STREQUAL "iOS")
+    list(APPEND all_dependencies custom_op_library)
+  endif()
   AddTest(DYN
           TARGET onnxruntime_shared_lib_test
           SOURCES ${onnxruntime_shared_lib_test_SRC} ${onnxruntime_unittest_main_src}

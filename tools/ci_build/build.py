@@ -1216,13 +1216,16 @@ def run_android_tests(args, source_dir, config, cwd):
 
 
 def run_ios_tests(args, source_dir, config, cwd):
+    num_parallel_jobs = str(os.cpu_count() if args.parallel == 0 else args.parallel)
     cpr = run_subprocess(["xcodebuild", "test", "-project", "./onnxruntime.xcodeproj",
                           "-configuration", config,
+                          "-jobs", num_parallel_jobs,
                           "-scheme",  "onnxruntime_test_all_xc", "-destination",
                           "platform=iOS Simulator,OS=latest,name=iPhone SE (2nd generation)"], cwd=cwd)
     if cpr.returncode == 0:
         cpr = run_subprocess(["xcodebuild", "test", "-project", "./onnxruntime.xcodeproj",
                               "-configuration", config,
+                              "-jobs", num_parallel_jobs,
                               "-scheme",  "onnxruntime_shared_lib_test_xc", "-destination",
                               "platform=iOS Simulator,OS=latest,name=iPhone SE (2nd generation)"], cwd=cwd)
     cpr.check_returncode()
