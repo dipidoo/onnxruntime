@@ -17,7 +17,6 @@ jobs:
           --update \
           --test
       displayName: (CPU EP) Build onnxruntime for iOS x86_64 and run tests using simulator
-  steps:
     - script: |
         python3 $(Build.SourcesDirectory)/tools/ci_build/build.py \
           --build_dir build/iOS_coreml \
