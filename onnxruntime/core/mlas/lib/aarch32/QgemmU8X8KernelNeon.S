@@ -18,7 +18,6 @@ Abstract:
 #include "asmmacro.h"
 
         .syntax unified
-        .arch   armv7
         .thumb
 
 //
