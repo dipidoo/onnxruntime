@@ -1215,7 +1215,7 @@ def run_android_tests(args, source_dir, config, cwd):
                         device_dir))
 
 
-def run_ios_tests(args, source_dir, config, cwd):
+def run_ios_simulator_tests(args, source_dir, config, cwd):
     cpr = run_subprocess(["xcodebuild", "test-without-building", "-project", "./onnxruntime.xcodeproj",
                           "-configuration", config,
                           "-scheme",  "onnxruntime_test_all_xc", "-destination",
@@ -1345,7 +1345,8 @@ def run_onnxruntime_tests(args, source_dir, ctest_path, build_dir, configs):
             run_android_tests(args, source_dir, config, cwd)
             continue
         elif args.ios:
-            run_ios_tests(args, source_dir, config, cwd)
+            if args.osx_arch == platform.machine():
+                run_ios_simulator_tests(args, source_dir, config, cwd)
             continue
         dll_path_list = []
         if args.use_nuphar:
