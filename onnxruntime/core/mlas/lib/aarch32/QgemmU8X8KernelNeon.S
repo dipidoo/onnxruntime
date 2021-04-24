@@ -6,7 +6,7 @@ Licensed under the MIT License.
 
 Module Name:
 
-    QgemmU8X8KernelNeon.s
+    QgemmU8X8KernelNeon.S
 
 Abstract:
 
@@ -18,6 +18,9 @@ Abstract:
 #include "asmmacro.h"
 
         .syntax unified
+#if !defined(__APPLE__)
+        .arch armv7-a
+#endif
         .thumb
 
 //
