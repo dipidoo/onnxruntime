@@ -383,8 +383,8 @@ class PosixEnv : public Env {
     const auto result = nftw(
         path.c_str(), &nftw_remove, 32, FTW_DEPTH | FTW_PHYS);
     ORT_RETURN_IF_NOT(result == 0, "DeleteFolder(): nftw() failed with error: ", result);
-    return Status::OK();
 #endif
+    return Status::OK();
   }
 
   common::Status FileOpenRd(const std::string& path, /*out*/ int& fd) const override {
