@@ -378,14 +378,18 @@ class PosixEnv : public Env {
     return Status::OK();
   }
 
+#if defined(__ANDROID__) && ANDROID_PLATFORM <= 16
+  common::Status DeleteFolder(const PathString&) const override {
+    return Status::OK();
+  }
+#else
   common::Status DeleteFolder(const PathString& path) const override {
-#if !(defined(__ANDROID__) && ANDROID_PLATFORM <= 16)
     const auto result = nftw(
         path.c_str(), &nftw_remove, 32, FTW_DEPTH | FTW_PHYS);
     ORT_RETURN_IF_NOT(result == 0, "DeleteFolder(): nftw() failed with error: ", result);
-#endif
     return Status::OK();
   }
+#endif
 
   common::Status FileOpenRd(const std::string& path, /*out*/ int& fd) const override {
     fd = open(path.c_str(), O_RDONLY);
