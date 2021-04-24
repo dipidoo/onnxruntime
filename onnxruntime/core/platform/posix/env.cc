@@ -85,6 +85,7 @@ long int TempFailureRetry(TFunc retriable_operation, TFuncArgs&&... args) {
   return result;
 }
 
+#if !defined(__ANDROID__) && ANDROID_PLATFORM <= 16
 // nftw() callback to remove a file
 int nftw_remove(
     const char* fpath, const struct stat* /*sb*/,
@@ -97,6 +98,7 @@ int nftw_remove(
   }
   return result;
 }
+#endif
 
 template <typename T>
 struct Freer {
@@ -378,15 +380,15 @@ class PosixEnv : public Env {
     return Status::OK();
   }
 
-#if defined(__ANDROID__) && ANDROID_PLATFORM <= 16
-  common::Status DeleteFolder(const PathString&) const override {
-    return Status::OK();
-  }
-#else
+#if !defined(__ANDROID__) && ANDROID_PLATFORM <= 16
   common::Status DeleteFolder(const PathString& path) const override {
     const auto result = nftw(
         path.c_str(), &nftw_remove, 32, FTW_DEPTH | FTW_PHYS);
     ORT_RETURN_IF_NOT(result == 0, "DeleteFolder(): nftw() failed with error: ", result);
+    return Status::OK();
+  }
+#else
+  common::Status DeleteFolder(const PathString&) const override {
     return Status::OK();
   }
 #endif
