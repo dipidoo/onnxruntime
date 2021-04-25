@@ -26,8 +26,8 @@ limitations under the License.
 #include <fcntl.h>
 #include <dlfcn.h>
 #include <ftw.h>
-#if defined(__ANDROID__) && ANDROID_PLATFORM <= 16
-#include "ftw.c"
+#if defined(__ANDROID__) && ANDROID_PLATFORM <= 16 && (defined(__arm__) || defined(__i386__))
+#include "ftw.cpp"
 #endif
 #include <string.h>
 #include <thread>
