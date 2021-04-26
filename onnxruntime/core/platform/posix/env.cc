@@ -27,6 +27,7 @@ limitations under the License.
 #include <dlfcn.h>
 #include <ftw.h>
 #if defined(__ANDROID__) && ANDROID_PLATFORM <= 16 && (defined(__arm__) || defined(__i386__))
+#include "../android/bionic/linker_memory.cpp"
 #include "../android/bionic/fts.c"
 #include "../android/bionic/ftw.cpp"
 #endif
