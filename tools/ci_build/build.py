@@ -1179,8 +1179,11 @@ def run_android_tests(args, source_dir, config, cwd):
         with contextlib.ExitStack() as context_stack:
             if args.android_run_emulator:
                 avd_name = "ort_android"
+                android_emulator_api = args.android_api
+                if args.android_abi == 'x86_64' or args.android_abi == 'arm64-v8a':
+                    android_emulator_api = max(21, android_emulator_api)
                 system_image = "system-images;android-{};google_apis;{}".format(
-                    args.android_api, args.android_abi)
+                    android_emulator_api, args.android_abi)
 
                 android.create_virtual_device(sdk_tool_paths, system_image, avd_name)
                 emulator_proc = context_stack.enter_context(

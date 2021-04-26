@@ -78,9 +78,9 @@ FTS* __fts_open(char* const* argv, int options, int (*compar)(const FTSENT**, co
 	size_t len;
 
 	/* Allocate/initialize the stream */
-	if ((sp = calloc(1, sizeof(FTS))) == NULL)
+	if ((sp = (FTS *)calloc(1, sizeof(FTS))) == NULL)
 		return (NULL);
-	sp->fts_compar = compar;
+	sp->fts_compar = (int (*)())compar;
 	sp->fts_options = options;
 
 	/* Logical walks turn on NOCHDIR; symbolic links are too hard. */
@@ -873,7 +873,7 @@ fts_sort(FTS *sp, FTSENT *head, int nitems)
 		struct _ftsent **a;
 
 		sp->fts_nitems = nitems + 40;
-		if ((a = reallocarray(sp->fts_array,
+		if ((a = (struct _ftsent **)reallocarray(sp->fts_array,
 		    sp->fts_nitems, sizeof(FTSENT *))) == NULL) {
 			free(sp->fts_array);
 			sp->fts_array = NULL;
@@ -884,7 +884,7 @@ fts_sort(FTS *sp, FTSENT *head, int nitems)
 	}
 	for (ap = sp->fts_array, p = head; p; p = p->fts_link)
 		*ap++ = p;
-	qsort((void *)sp->fts_array, nitems, sizeof(FTSENT *), sp->fts_compar);
+	qsort((void *)sp->fts_array, nitems, sizeof(FTSENT *), (int (*)(const void *, const void *))sp->fts_compar);
 	for (head = *(ap = sp->fts_array); --nitems; ++ap)
 		ap[0]->fts_link = ap[1];
 	ap[0]->fts_link = NULL;
@@ -908,7 +908,7 @@ fts_alloc(FTS *sp, char *name, size_t namelen)
 	len = sizeof(FTSENT) + namelen;
 	if (!ISSET(FTS_NOSTAT))
 		len += sizeof(struct stat) + ALIGNBYTES;
-	if ((p = calloc(1, len)) == NULL)
+	if ((p = (FTSENT *)calloc(1, len)) == NULL)
 		return (NULL);
 
 	p->fts_path = sp->fts_path;
@@ -955,7 +955,7 @@ fts_palloc(FTS *sp, size_t more)
 		return (1);
 	}
 	sp->fts_pathlen += more;
-	p = realloc(sp->fts_path, sp->fts_pathlen);
+	p = (char *)realloc(sp->fts_path, sp->fts_pathlen);
 	if (p == NULL) {
 		free(sp->fts_path);
 		sp->fts_path = NULL;
