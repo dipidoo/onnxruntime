@@ -42,7 +42,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static FTSENT	*fts_alloc(FTS *, char *, size_t);
+static FTSENT	*fts_alloc(FTS *, const char *, size_t);
 static FTSENT	*fts_build(FTS *, int);
 static void	 fts_lfree(FTSENT *);
 static void	 fts_load(FTS *, FTSENT *);
@@ -892,7 +892,7 @@ fts_sort(FTS *sp, FTSENT *head, int nitems)
 }
 
 static FTSENT *
-fts_alloc(FTS *sp, char *name, size_t namelen)
+fts_alloc(FTS *sp, const char *name, size_t namelen)
 {
 	FTSENT *p;
 	size_t len;
